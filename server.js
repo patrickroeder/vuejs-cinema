@@ -42,6 +42,7 @@ app.get('/offline_api', function(req, res) {
 
 app.listen(process.env.PORT, function () {
   console.log(`Example app listening on port ${process.env.PORT}!`);
+  // when the server starts, we use open module to open browser tab for us
   if (process.env.NODE_ENV === 'development') {
     require('open')(`http://localhost:${process.env.PORT}`);
   }
