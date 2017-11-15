@@ -1,28 +1,25 @@
+<!-- This component's job: handle filtering -->
+
 <template lang="html">
   <div id="movie-list">
-    <div v-for="movie in filteredMovies" class="movie"> {{ movie.title }} </div>
+    <div v-if="filteredMovies.length">
+      <movie-item v-for="movie in filteredMovies" :movie="movie.movie"></movie-item>
+    </div>
+    <div v-else-if="movies.length" class="no-results">
+      No results.
+    </div>
+    <div v-else class="no-results">
+      Loading...
+    </div>
   </div>
 </template>
 
 <script>
   import genres from '../util/genres';
+  import MovieItem from './MovieItem.vue';
 
   export default {
-    // ES6 syntax for data: function()
-    data() {
-      return {
-        // return a fresh data object for each component instance
-        // see: https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function
-        movies: [
-          { title: 'Up!', genre: genres.ANIMATION },
-          { title: 'The Incredibles', genre: genres.ANIMATION },
-          { title: 'Star Wars', genre: genres.FANTASY },
-          { title: '13 Days', genre: genres.DRAMA },
-          { title: 'Lord Of The Rings', genre: genres.FANTASY }
-        ]
-      };
-    },
-    props: [ 'genre', 'time' ],
+    props: [ 'genre', 'time', 'movies' ],
     methods: {
       // callback function for filteredMovies()
       movieFilter(movie) {
@@ -31,7 +28,15 @@
         if (!this.genre.length) { // if genre array empty, let this movie pass
           return true;
         } else {
-          return this.genre.find(genre => movie.genre === genre);
+          let movieGenres = movie.movie.Genre.split(", ");
+          let matched = true;
+          // for each selected genre, iterate
+          this.genre.forEach(genre => {
+            if (movieGenres.indexOf(genre) === -1) { // no match
+              matched = false;
+            }
+          });
+          return matched;
         }
       }
     },
@@ -39,6 +44,9 @@
       filteredMovies() {
         return this.movies.filter(this.movieFilter);
       }
+    },
+    components: {
+      MovieItem
     }
   }
 </script>

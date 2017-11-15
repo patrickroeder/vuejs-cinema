@@ -1,16 +1,21 @@
 import Vue from 'vue';
+import axios from 'axios';
 import './style.scss';
 
 import MovieList from './components/MovieList.vue';
 import MovieFilter from './components/MovieFilter.vue';
 
-new Vue({
+// drop-in replacement for vue-resource
+Vue.prototype.$http = axios;
+
+let vm = new Vue({
   el: '#app',
   data: {
     // filter arrays always contain whichever filters have been checked
     // selected genre(s) and time(s): refactor as es6 set?
     genre: [],
-    time: []
+    time: [],
+    movies: []
   },
   methods: {
     checkFilter(category, title, checked) {
@@ -30,5 +35,10 @@ new Vue({
   components: {
     MovieList,
     MovieFilter
+  },
+  created() {
+    this.$http.get('/api').then(response => {
+      this.movies = response.data;
+    });
   }
 });
