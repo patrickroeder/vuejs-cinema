@@ -2,13 +2,22 @@ import Vue from 'vue';
 import axios from 'axios';
 import './style.scss';
 
-import MovieList from './components/MovieList.vue';
-import MovieFilter from './components/MovieFilter.vue';
+import { checkFilter } from './util/bus';
+import routes from './util/routes';
+
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
 
 // drop-in replacement for vue-resource
 Vue.prototype.$http = axios;
 
-let vm = new Vue({
+// central event dispatcher outside of the main vue instance
+window.Event = new Vue();
+
+// TODO: try out abstract mode
+const router = new VueRouter({ routes });
+
+new Vue({
   el: '#app',
   data: {
     // filter arrays always contain whichever filters have been checked
@@ -17,28 +26,12 @@ let vm = new Vue({
     time: [],
     movies: []
   },
-  methods: {
-    checkFilter(category, title, checked) {
-      if (checked) {
-        this[category].push(title);
-      } else {
-        // this return -1 if title is not in the array
-        let index = this[category].indexOf(title);
-        if (index > -1) {
-          // remove 1 element from array
-          this[category].splice(index, 1);
-        }
-      }
-    }
-  },
-  // local component registration
-  components: {
-    MovieList,
-    MovieFilter
-  },
   created() {
     this.$http.get('/api').then(response => {
       this.movies = response.data;
     });
-  }
+    // callback: assignment (checkFilter = function checkFilter(x,y,z))
+    window.Event.$on('check-filter', checkFilter.bind(this));
+  },
+  router
 });
