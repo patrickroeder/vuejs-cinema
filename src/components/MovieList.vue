@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import genres from '../util/genres';
   import MovieItem from './MovieItem.vue';
 
   export default {
