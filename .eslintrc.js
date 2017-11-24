@@ -1,7 +1,7 @@
 module.exports = {
   extends: [
-    'eslint:recommended',
-    'plugin:vue/base' // or 'plugin:vue/base'
+    // 'eslint:recommended',
+    'plugin:vue/recommended' // or 'plugin:vue/base'
   ],
   rules: {
     // override/add rules' settings here
