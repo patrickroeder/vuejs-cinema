@@ -33,7 +33,8 @@ new Vue({
     genre: [],
     time: [],
     movies: [],
-    moment
+    moment,
+    day: moment()
   },
   created() {
     console.log(this.$moment);
