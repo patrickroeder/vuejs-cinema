@@ -10,7 +10,10 @@
         <span class="movie-rating">{{ movie.Rated }}</span>
       </div>
       <div class="movie-sessions">
-        <div v-for="session in filteredSessions(sessions)" class="session-time-wrapper">
+        <div
+        v-for="session in filteredSessions(sessions)" class="session-time-wrapper tooltip-wrapper"
+        v-tooltip="{ seats: session.seats }"
+        >
           <div class="session-time">{{ formatSessionTime(session.time) }}</div>
         </div>
       </div>
