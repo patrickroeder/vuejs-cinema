@@ -6,10 +6,12 @@ const path = require('path');
 const fs = require('fs');
 const api = require('./api');
 
+// if we're in development mode, use webpack server and serve from memory
 if (process.env.NODE_ENV === 'development') {
   require('./webpack-dev-middleware').init(app);
 }
 
+// if we're in production mode, serve the files statically from the /dist folder
 if (process.env.NODE_ENV === 'production') {
   app.use('/dist', express.static(path.join(__dirname, 'dist')));
 }
